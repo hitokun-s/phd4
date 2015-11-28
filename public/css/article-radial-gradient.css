@@ -1,0 +1,12 @@
+html{
+    min-height:100%;
+}
+body {
+    background-color: #0176A0;
+    background-image: -moz-radial-gradient(center, ellipse cover,  #fff 20%, #b6dec5 80%, #005077 100%);
+    background-image: -webkit-radial-gradient(center, ellipse cover, #fff 20%, #b6dec5 80%, #005077 100%);
+    background-image: -o-radial-gradient(center, ellipse cover,  #fff 20%, #b6dec5 80%, #005077 100%);
+    background-image: -ms-radial-gradient(center, ellipse cover,  #fff 20%, #b6dec5 80%, #005077 100%);
+    background-image: radial-gradient(center, ellipse cover, #fff 20%, #b6dec5 80%, #005077 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff', endColorstr='#005077', GradientType=0);
+}
