@@ -1,7 +1,11 @@
 var drag = d3.behavior.drag().on("drag", function (d, i) {
     d.x += d3.event.dx;
     d.y += d3.event.dy;
-    d3.select(this).attr({x: d.x, y: d.y});
+    d3.select(this).attr({
+        x: d.x,
+        y: d.y,
+        transform:"translate("+ d.x+","+ d.y+")"
+    });
 });
 
 var API_URL_PHOTO = "http://api.eyeem.com/photos/:id";
@@ -17,12 +21,11 @@ var photoId = 58331258;
 var CLIENT_ID = "egaTWyXw1czK9XU49gIIMQdZrSySZ4US";
 
 var publish = function () {
+    ctx2.drawSvg(document.getElementsByTagName('svg')[0].innerHTML);
     ctx.drawImage(canvas2, 0, 0);
     $("#svg").remove();
 }
-$("#publish").click(function () {
-    publish();
-});
+$("#publish").click(publish);
 
 var loadImage = function (photoId) {
 
@@ -40,16 +43,23 @@ var loadImage = function (photoId) {
     var svg = d3.select("svg");
     svg.attr("width", 600);
     svg.attr("height", 600);
-    svg.append("text").text("Hello World!").attr({
-        class: "text",
-        x: 60,
-        y: 80,
-        "font-family": "Times New Roman",
-        "font-size": "20px"
-    }).datum({x: 60, y: 80}).call(drag);
+
+
+    ["Hello!", "This is wondeful picture!"].forEach(function(v){
+        var g = svg.append("g").attr({
+            transform:"translate(60,80)",
+            x: 60,
+            y: 80
+        }).datum({x: 60, y: 80}).call(drag);
+        g.append("text").text(v).attr({
+            class: "text",
+            "font-family": "Times New Roman",
+            "font-size": "20px"
+        }).call(addBorder, {});
+    });
+
 
 //        ctx2.scale(13/6, 13/6);
-    ctx2.drawSvg(document.getElementsByTagName('svg')[0].innerHTML);
 }
 $(function () {
     $.get(API_URL_PHOTO.replace(":id", photoId), {client_id: CLIENT_ID}, function (data) {
