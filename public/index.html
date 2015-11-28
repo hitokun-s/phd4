@@ -24,7 +24,7 @@
         #canvas {
             z-index: 1;
         }
-        #svg {
+        #svg-wrapper {
             z-index: 2;
         }
         .text{
@@ -53,7 +53,9 @@
         <div class="col-lg-12">
             <div id="stage">
                 <canvas id="canvas" width="600" height="600"></canvas>
-                <svg id="svg"></svg>
+                <div id="svg-wrapper">
+                    <svg id="svg"></svg>
+                </div>
             </div>
         </div>
     </div>

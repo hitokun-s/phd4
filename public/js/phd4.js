@@ -21,7 +21,8 @@ var photoId = 58331258;
 var CLIENT_ID = "egaTWyXw1czK9XU49gIIMQdZrSySZ4US";
 
 var publish = function () {
-    ctx2.drawSvg(document.getElementsByTagName('svg')[0].innerHTML);
+    console.log($("#svg").html());
+    ctx2.drawSvg("<svg>"+ $("#svg").html() +"</svg>");
     ctx.drawImage(canvas2, 0, 0);
     $("#svg").remove();
 }
