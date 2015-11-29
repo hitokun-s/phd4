@@ -40,9 +40,9 @@ router.get("/loadImage", function (req, res) {
             console.log(jsonStr);
             var json = JSON.parse(jsonStr);
             console.log(json.location);
-            console.log(json.location.split("/")[5]);
-            var uuid = parseInt(json.location.split("/")[5]);
-
+            var uuid = json.location.split("/")[5];
+            console.log(uuid);
+            
             res.json({uuid: uuid});
 
             console.log(stderr);
