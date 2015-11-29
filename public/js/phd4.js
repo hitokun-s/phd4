@@ -137,11 +137,18 @@ $(function () {
         }).done(function(data) {
             console.log(data);
             var part = [];
-            for(var i= 0;i<10;i++){
+            for(var i= 0;i<15;i++){
                 part.push(data.concepts[i]);
             }
-            addComments(part.map(function(v){
-                return "Great " + v + "!!";
+            addComments(part.map(function(v, i){
+                var prefixes = [
+                    "Great ",
+                    "Amazing ",
+                    "Excellent ",
+                    "Nice ",
+                    "What a "
+                ];
+                return prefixes[i % 4] + v + "!!";
             }));
         });
     });
