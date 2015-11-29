@@ -124,5 +124,19 @@ $(function () {
             addBaloon();
         }
     });
+    $("#btn-secret").click(function(){
+        var uuid = "a54c1f6e-3481-4163-86f5-772099eecfd5";
+        // https://vision.eyeem.com/photohackday/photos/UUID-from-POST-request -H "Authorization: PHOTOHACKDAY123"
+        $.ajax({
+            url: "https://vision.eyeem.com/photohackday/photos/" + uuid,
+            type: 'GET',
+            headers: {
+                "Authorization":"PHOTOHACKDAY123"
+            },
+            dataType: 'json'
+        }).done(function(data) {
+            console.log(data);
+        });
+    });
 });
 
