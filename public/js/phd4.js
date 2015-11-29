@@ -101,6 +101,7 @@ var loadPhoto = function(){
             photoUrl: data.photo.photoUrl,
             photoId: photoId
         }, function (data) {
+            console.log(data);
             loadImage(photoId); // この時点で、サーバに画像が、/img/[photoId].jpg として保存されているはず！
         });
     });

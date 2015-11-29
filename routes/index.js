@@ -5,7 +5,7 @@ var http = require('http'),
     Stream = require('stream').Transform,
     fs = require('fs'),
     request = require("request");
-
+var exec = require('child_process').exec;
 
 var API_URL_PHOTO = "http://api.eyeem.com/photos/:id";
 var API_URL_COMMENT = "http://api.eyeem.com/photos/:id/comments";
@@ -21,10 +21,37 @@ router.get('/', function (req, res, next) {
 
 router.get("/loadImage", function (req, res) {
     console.log(req.query.photoUrl);
+    var imgPath = "public/img/" + req.query.photoId + ".jpg";
 
-    var r = request(req.query.photoUrl).pipe(fs.createWriteStream("public/img/" + req.query.photoId + ".jpg"));
+    var r = request(req.query.photoUrl).pipe(fs.createWriteStream(imgPath));
     r.on('close', function () {
-        res.json({koas: "hisd"});
+
+        var commandLine = "curl -i -XPOST https://vision.eyeem.com/photohackday/photos -H \"Authorization: PHOTOHACKDAY123\" -T \"" + imgPath + "\"";
+        var child = exec(commandLine, function (error, stdout, stderr) {
+
+            if(error){
+                res.json({error:error});
+            }
+
+            console.log(stdout);
+            var jsonStr = (stdout.substring(sIdx, eIdx + 1));
+            console.log(jsonStr);
+            var json = JSON.parse(jsonStr);
+            console.log(json.location);
+            console.log(json.location.split("/")[5]);
+            var uuid = parseInt(json.location.split("/")[5]);
+
+            res.json({uuid: uuid});
+
+            console.log(stderr);
+            //sys.print('stdout: ' + stdout);
+            //sys.print('stderr: ' + stderr);
+            if (error !== null) {
+                console.log('exec error: ' + error);
+            }
+        });
+
+        //res.json({koas: "hisd"});
     });
     r.on('error', function (message) {
         console.log(message);

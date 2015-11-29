@@ -14,17 +14,12 @@ console.log("hitokun!");
 //    console.log(error);
 //}));
 
-var sys = require('sys')
+
 var exec = require('child_process').exec;
-var child;
 var path = "public/img/58331258.jpg";
 var commandLine = "curl -i -XPOST https://vision.eyeem.com/photohackday/photos -H \"Authorization: PHOTOHACKDAY123\" -T \"" + path + "\"";
-child = exec(commandLine, function (error, stdout, stderr) {
+var child = exec(commandLine, function (error, stdout, stderr) {
     console.log(stdout);
-    var sIdx = stdout.indexOf("{");
-    var eIdx = stdout.indexOf("}");
-    console.log(stdout.indexOf("{"));
-    console.log(stdout.indexOf("}"));
     var jsonStr = (stdout.substring(sIdx, eIdx + 1));
     console.log(jsonStr);
     var json = JSON.parse(jsonStr);
