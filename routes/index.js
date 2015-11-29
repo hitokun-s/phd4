@@ -33,6 +33,8 @@ router.get("/loadImage", function (req, res) {
                 res.json({error:error});
             }
 
+            var sIdx = stdout.indexOf("{");
+            var eIdx = stdout.indexOf("}");
             console.log(stdout);
             var jsonStr = (stdout.substring(sIdx, eIdx + 1));
             console.log(jsonStr);
