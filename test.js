@@ -17,7 +17,8 @@ console.log("hitokun!");
 var sys = require('sys')
 var exec = require('child_process').exec;
 var child;
-var commandLine = "pwd";
+var path = "public/img/58331258.jpg";
+var commandLine = "curl -i -XPOST https://vision.eyeem.com/photohackday/photos -H \"Authorization: PHOTOHACKDAY123\" -T \"" + path + "\"";
 child = exec(commandLine, function (error, stdout, stderr) {
     console.log(stdout);
     console.log(stderr);
