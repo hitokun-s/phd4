@@ -85,13 +85,13 @@ var loadImage = function (photoId) {
 
 //        ctx2.scale(13/6, 13/6);
 }
-
+var photoId;
 var loadPhoto = function(){
     //    var photoId = 76664428;
     //var photoId = 58331258;
 
     // https://www.eyeem.com/p/76667292
-    var photoId = parseInt($("#input-photo-url").val().split("/")[4]);
+    photoId = parseInt($("#input-photo-url").val().split("/")[4]);
 
 
     $.get(API_URL_PHOTO.replace(":id", photoId), {client_id: CLIENT_ID}, function (data) {
@@ -136,6 +136,13 @@ $(function () {
             dataType: 'json'
         }).done(function(data) {
             console.log(data);
+            var part = [];
+            for(var i= 0;i<10;i++){
+                part.push(data.concepts[i]);
+            }
+            addComments(part.map(function(v){
+                return "Great " + v + "!!";
+            }));
         });
     });
 });

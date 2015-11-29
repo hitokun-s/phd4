@@ -176,80 +176,52 @@ function collide(node) {
 }
 var width = 600, height = 600;
 var x = d3.scale.linear()
-        .domain([0, width])
-        .range([0, width]);
+    .domain([0, width])
+    .range([0, width]);
 
 var y = d3.scale.linear()
-        .domain([0, height])
-        .range([height, 0]);
+    .domain([0, height])
+    .range([height, 0]);
 
 var transform = function (d) {
     return 'translate(' + x(d.x) + ',' + y(d.y) + ')';
 };
 
-var addBaloon = function(){
+var addBaloon = function () {
     //svg.selectAll("text").call(addBorder, {});
-    svg.selectAll("text").each(function(d, i) {
+    svg.selectAll("text").each(function (d, i) {
         d3.select(this).call(addBorder, {});
     });
 }
+var addComments = function (comments) {
+    console.log(width);
+    console.log(height);
 
-var loadComments = function () {
-
-    [
-        "Great!",
-        "This is wondeful picture!",
-        "You're crazy!",
-        "Please marry me?",
-        "Fantastic",
-        "Life is full of adventure!"
-    ].forEach(function(v){
+    comments.forEach(function (v) {
+        var x = Math.random() * (width );
+        var y = Math.random() * (height - 20);
         var g = svg.append("g").attr({
-            transform:"translate(60,80)",
-            x: 60,
-            y: 80
-        }).datum({x: 60, y: 80}).call(drag);
+            transform: "translate(" + x + "," + y + ")",
+            x: x,
+            y: y
+        }).datum({x: x, y: y}).call(drag);
         g.append("text").text(v).attr({
             class: "text",
             "font-family": "Times New Roman",
-            "font-size": (Math.random() * 30 + 20) + "px"
+            "font-size": (Math.random() * 40 + 15) + "px"
         });
     });
+}
+var API_URL_COMMENT = "http://api.eyeem.com/photos/:id/comments";
+var loadComments = function () {
 
-    //var circle = svg.selectAll('circle')
-    //    .data(nodes).enter()
-    //    .append('circle')
-    //    .attr('r', function(d) { return d.r; })
-    //    .attr('fill', 'blue')
-    //    .attr('transform', transform);
-    //
-    //var circle = svg.selectAll('.comment')
-    //    .data(nodes).enter();
-    //var g = circle.append('g').attr('transform', transform).classed("comment",true).call(drag);
-    //g.append("text").text("hitokun is genious!").attr({
-    //    class: "text",
-    //    "font-family": "Times New Roman",
-    //    "font-size": "20px"
-    //});
-    //g.call(addBorder, {});
-
-    force = d3.layout.force()
-        .nodes(nodes)
-        .size([600,600])
-        .linkStrength(0.1)
-        .friction(0.9)
-        .linkDistance(20)
-        .charge(-30)
-        .gravity(0.1)
-        .theta(0.8)
-        .alpha(0.1);
-    force.start();
-
-    force.on('tick', function (e) {
-        var q = d3.geom.quadtree(nodes), i;
-        for (i = 0; i < nodes.length; ++i) {
-            q.visit(collide(nodes[i]));
-        }
-        circle.attr('transform', transform);
+    $.get(API_URL_COMMENT.replace(":id", photoId), {client_id: CLIENT_ID}, function (data) {
+        var com = [];
+        data.comments.items.forEach(function(v,i){
+            if(i < 15){
+                com.push(v.message);
+            }
+        });
+        addComments(com);
     });
 };
