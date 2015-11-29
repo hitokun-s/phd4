@@ -187,9 +187,23 @@ var transform = function (d) {
     return 'translate(' + x(d.x) + ',' + y(d.y) + ')';
 };
 
-$(function () {
+var addBaloon = function(){
+    //svg.selectAll("text").call(addBorder, {});
+    svg.selectAll("text").each(function(d, i) {
+        d3.select(this).call(addBorder, {});
+    });
+}
 
-    ["Hello!", "This is wondeful picture!"].forEach(function(v){
+var loadComments = function () {
+
+    [
+        "Great!",
+        "This is wondeful picture!",
+        "You're crazy!",
+        "Please marry me?",
+        "Fantastic",
+        "Life is full of adventure!"
+    ].forEach(function(v){
         var g = svg.append("g").attr({
             transform:"translate(60,80)",
             x: 60,
@@ -198,8 +212,8 @@ $(function () {
         g.append("text").text(v).attr({
             class: "text",
             "font-family": "Times New Roman",
-            "font-size": "20px"
-        }).call(addBorder, {});
+            "font-size": (Math.random() * 30 + 20) + "px"
+        });
     });
 
     //var circle = svg.selectAll('circle')
@@ -238,4 +252,4 @@ $(function () {
         }
         circle.attr('transform', transform);
     });
-});
+};

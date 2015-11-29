@@ -16,8 +16,6 @@ var ctx2 = canvas2.getContext('2d');
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 
-//    var photoId = 76664428;
-var photoId = 58331258;
 var CLIENT_ID = "egaTWyXw1czK9XU49gIIMQdZrSySZ4US";
 var svg = d3.select("svg");
 
@@ -32,6 +30,8 @@ var download = function () {
 }
 $("#download").click(download);
 
+var height,width;
+
 var loadImage = function (photoId) {
 
     if (!canvas || !canvas.getContext) {
@@ -42,12 +42,31 @@ var loadImage = function (photoId) {
     var img = new Image();
     img.onload = function () {
         console.log("on load!");
+        height = img.height;
+        width = img.width;
+        svg.attr({
+            width:width,
+            height:height
+        });
+        $("#stage").attr("width", width);
+        $("#stage").attr("height", height);
+        $("#stage").css("width", width);
+        $("#stage").css("height", height);
+        $("#canvas").attr("width", width);
+        $("#canvas").attr("height", height);
+        $("#canvas2").attr("width", width);
+        $("#canvas2").attr("height", height);
+        ctx = canvas.getContext('2d');
+        ctx2 = canvas2.getContext('2d');
+
         ctx.drawImage(img, 0, 0);
     };
     img.src = "img/" + photoId + ".jpg";
 
     svg.attr("width", 600);
     svg.attr("height", 600);
+
+    loadComments();
 
 
     //["Hello!", "This is wondeful picture!"].forEach(function(v){
@@ -66,7 +85,15 @@ var loadImage = function (photoId) {
 
 //        ctx2.scale(13/6, 13/6);
 }
-$(function () {
+
+var loadPhoto = function(){
+    //    var photoId = 76664428;
+    //var photoId = 58331258;
+
+    // https://www.eyeem.com/p/76667292
+    var photoId = parseInt($("#input-photo-url").val().split("/")[4]);
+
+
     $.get(API_URL_PHOTO.replace(":id", photoId), {client_id: CLIENT_ID}, function (data) {
         console.log(data);
         console.log(data.photo.photoUrl);
@@ -85,6 +112,16 @@ $(function () {
 //                console.log(item.user);
 //            $("#comments").append($("<li/>").text(item.message));
         });
+    });
+}
+
+$(function () {
+    $("#btn-photo-load").click(loadPhoto);
+    $("#chk-baloon").change(function(v){
+        console.log(this.checked);
+        if(this.checked){
+            addBaloon();
+        }
     });
 });
 
