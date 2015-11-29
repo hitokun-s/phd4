@@ -223,5 +223,9 @@ var loadComments = function () {
             }
         });
         addComments(com);
+
+        if(data.comments.items.length < 3){
+            $("#row-secret").show();
+        }
     });
 };
