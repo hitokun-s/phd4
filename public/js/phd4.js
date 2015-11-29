@@ -19,14 +19,18 @@ var ctx = canvas.getContext('2d');
 //    var photoId = 76664428;
 var photoId = 58331258;
 var CLIENT_ID = "egaTWyXw1czK9XU49gIIMQdZrSySZ4US";
+var svg = d3.select("svg");
 
-var publish = function () {
+var download = function () {
     console.log($("#svg").html());
     ctx2.drawSvg("<svg>"+ $("#svg").html() +"</svg>");
     ctx.drawImage(canvas2, 0, 0);
     $("#svg").remove();
+    canvas.toBlob(function(blob) {
+        saveAs(blob, "123.png");
+    }, "image/png");
 }
-$("#publish").click(publish);
+$("#download").click(download);
 
 var loadImage = function (photoId) {
 
@@ -41,23 +45,23 @@ var loadImage = function (photoId) {
         ctx.drawImage(img, 0, 0);
     };
     img.src = "img/" + photoId + ".jpg";
-    var svg = d3.select("svg");
+
     svg.attr("width", 600);
     svg.attr("height", 600);
 
 
-    ["Hello!", "This is wondeful picture!"].forEach(function(v){
-        var g = svg.append("g").attr({
-            transform:"translate(60,80)",
-            x: 60,
-            y: 80
-        }).datum({x: 60, y: 80}).call(drag);
-        g.append("text").text(v).attr({
-            class: "text",
-            "font-family": "Times New Roman",
-            "font-size": "20px"
-        }).call(addBorder, {});
-    });
+    //["Hello!", "This is wondeful picture!"].forEach(function(v){
+    //    var g = svg.append("g").attr({
+    //        transform:"translate(60,80)",
+    //        x: 60,
+    //        y: 80
+    //    }).datum({x: 60, y: 80}).call(drag);
+    //    g.append("text").text(v).attr({
+    //        class: "text",
+    //        "font-family": "Times New Roman",
+    //        "font-size": "20px"
+    //    }).call(addBorder, {});
+    //});
 
 
 //        ctx2.scale(13/6, 13/6);
@@ -79,7 +83,7 @@ $(function () {
         data.comments.items.forEach(function (item) {
             //console.log(item.message);
 //                console.log(item.user);
-            $("#comments").append($("<li/>").text(item.message));
+//            $("#comments").append($("<li/>").text(item.message));
         });
     });
 });

@@ -1,0 +1,23 @@
+#stage{
+    width:600px;
+    height:600px;
+    margin-left: auto;
+    margin-right: auto;
+    border:solid thick #000;
+    box-sizing: initial;
+}
+#stage *{
+    position: absolute;
+}
+#canvas {
+    z-index: 1;
+}
+#svg-wrapper {
+    z-index: 2;
+}
+.text{
+    cursor:pointer;
+}
+#canvas2{
+    display: none;
+}
