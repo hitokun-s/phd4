@@ -20,10 +20,16 @@ var child;
 var path = "public/img/58331258.jpg";
 var commandLine = "curl -i -XPOST https://vision.eyeem.com/photohackday/photos -H \"Authorization: PHOTOHACKDAY123\" -T \"" + path + "\"";
 child = exec(commandLine, function (error, stdout, stderr) {
-    var res = JSON.parse(stdout);
-    console.log(res);
-    console.log(res.location);
-    console.log(res.location.split("/")[5]);
+    console.log(stdout);
+    var sIdx = stdout.indexOf("{");
+    var eIdx = stdout.indexOf("}");
+    console.log(stdout.indexOf("{"));
+    console.log(stdout.indexOf("}"));
+    var jsonStr = (stdout.substring(sIdx, eIdx + 1));
+    console.log(jsonStr);
+    var json = JSON.parse(jsonStr);
+    console.log(json.location);
+    console.log(json.location.split("/")[5]);
 
     console.log(stderr);
     //sys.print('stdout: ' + stdout);
