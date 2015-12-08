@@ -22,7 +22,7 @@ module.exports = function(grunt) {
         },
         ejs: {
             all: {
-                src: ['**/*.ejs', '!header.ejs', '!footer.ejs'],
+                src: ['**/*.ejs', '!header.ejs', '!footer.ejs', '!ga.ejs'],
                 dest: 'public',
                 expand: true,
                 ext: '.html',
