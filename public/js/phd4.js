@@ -125,6 +125,8 @@ $(function () {
         }
     });
     $("#btn-secret").click(function(){
+        alert("secret button is now under modification. published in the middle of Dec");
+        return;
         var uuid = "a54c1f6e-3481-4163-86f5-772099eecfd5";
         // https://vision.eyeem.com/photohackday/photos/UUID-from-POST-request -H "Authorization: PHOTOHACKDAY123"
         $.ajax({
