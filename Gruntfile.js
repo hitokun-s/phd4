@@ -29,6 +29,7 @@ module.exports = function(grunt) {
                 cwd:'ejs',
                 options: {
                     title:"Commentie",
+                    author:"Hitoshi Wada",
                     path : "",// 相対パス
                     require:require
                 }
