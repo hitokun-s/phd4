@@ -46,7 +46,7 @@ var prepareVisionApi = function (uuid) {
         }, function (xmlHttp, status, error) { // errorHandler
             cnt++;
             console.log("Vision API has not analyzed this photo yet. Let's retry...");
-            if (cnt < 10) {
+            if (cnt < 20) {
                 setTimeout(function () {
                     prepareVisionApi(uuid);
                 }, 1000);
@@ -94,11 +94,17 @@ var photoId; // sample 76664428, 58331258, 76667292
 var uuid;
 var visionApiPrepared = false;
 
+var clearStage = function(){
+    svg.selectAll("*").remove();
+    visionApiPrepared = false;
+}
+
 var loadPhoto = function () {
+
+    clearStage();
 
     // https://www.eyeem.com/p/76667292
     photoId = parseInt($("#input-photo-url").val().split("/")[4]);
-
 
     $.get(API_URL_PHOTO.replace(":id", photoId), {client_id: CLIENT_ID}, function (data) {
         console.log(data);
