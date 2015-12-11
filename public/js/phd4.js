@@ -26,7 +26,7 @@ var download = function () {
     ctx.drawImage(canvas2, 0, 0);
     $("#svg").remove();
     canvas.toBlob(function (blob) {
-        saveAs(blob, "123.png");
+        saveAs(blob, photoId + "_commentied.png");
     }, "image/png");
 }
 $("#download").click(download);
