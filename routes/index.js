@@ -25,9 +25,11 @@ router.get("/loadImage", function (req, res) {
 
     var r = request(req.query.photoUrl).pipe(fs.createWriteStream(imgPath));
     r.on('close', function () {
-        return res.json({hoge:"hoge"});
 
         var commandLine = "curl -i -XPOST https://vision.eyeem.com/photohackday/photos -H \"Authorization: PHOTOHACKDAY123\" -T \"" + imgPath + "\"";
+        
+        console.log("VISION API command:" + commandLine);
+        
         var child = exec(commandLine, function (error, stdout, stderr) {
 
             if(error){
