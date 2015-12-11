@@ -139,9 +139,10 @@ var queryVisionApi = function (uuid, successHandler, errorHandler) {
 $(function () {
     $("#btn-photo-load").click(loadPhoto);
     $("#chk-baloon").change(function (v) {
-        console.log(this.checked);
         if (this.checked) {
             addBaloon();
+        }else{
+            removeBorder();
         }
     });
     $("#btn-secret").click(function () {

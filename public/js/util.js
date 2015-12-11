@@ -40,13 +40,14 @@ var addBorder = function (text, opt) {
         stroke: "black",
         "stroke-width": 3
     });
-
+    // push text to front, push baloon to back
     d3.selectAll(parent.node().childNodes).sort(function (a, b) {
-        console.log(a);
-        console.log(b);
         return 1;
     });
 };
+var removeBorder = function(){
+    svg.selectAll(["polygon","rect","path"]).remove();
+}
 
 var graph = {
     nodes: [
@@ -188,7 +189,6 @@ var transform = function (d) {
 };
 
 var addBaloon = function () {
-    //svg.selectAll("text").call(addBorder, {});
     svg.selectAll("text").each(function (d, i) {
         d3.select(this).call(addBorder, {});
     });
