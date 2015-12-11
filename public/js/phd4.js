@@ -4,12 +4,13 @@ var drag = d3.behavior.drag().on("drag", function (d, i) {
     d3.select(this).attr({
         x: d.x,
         y: d.y,
-        transform:"translate("+ d.x+","+ d.y+")"
+        transform: "translate(" + d.x + "," + d.y + ")"
     });
 });
 
 var API_URL_PHOTO = "http://api.eyeem.com/photos/:id";
 var API_URL_COMMENT = "http://api.eyeem.com/photos/:id/comments";
+var API_URL_VISION = "https://vision.eyeem.com/photohackday/photos/:uuid";
 
 var canvas2 = document.getElementById('canvas2');
 var ctx2 = canvas2.getContext('2d');
@@ -21,16 +22,37 @@ var svg = d3.select("svg");
 
 var download = function () {
     console.log($("#svg").html());
-    ctx2.drawSvg("<svg>"+ $("#svg").html() +"</svg>");
+    ctx2.drawSvg("<svg>" + $("#svg").html() + "</svg>");
     ctx.drawImage(canvas2, 0, 0);
     $("#svg").remove();
-    canvas.toBlob(function(blob) {
+    canvas.toBlob(function (blob) {
         saveAs(blob, "123.png");
     }, "image/png");
 }
 $("#download").click(download);
 
-var height,width;
+var height, width;
+
+// VISION APIの解析が完了するまでチェックし続ける
+var cnt = 0;
+var prepareVisionApi = function (uuid) {
+    queryVisionApi(uuid,
+        function (data) { // successHandler
+            console.log("succeed to get Vision API result!");
+            alert("Vision API finished to analyze this photo.");
+            alert("Now you can click 'secret button'");
+            console.log(data);
+            visionApiPrepared = true;
+        }, function (xmlHttp, status, error) { // errorHandler
+            cnt++;
+            console.log("Vision API has not analyzed this photo yet. Let's retry...");
+            if (cnt < 10) {
+                setTimeout(function () {
+                    prepareVisionApi(uuid);
+                }, 1000);
+            }
+        });
+}
 
 var loadImage = function (photoId) {
 
@@ -45,8 +67,8 @@ var loadImage = function (photoId) {
         height = img.height;
         width = img.width;
         svg.attr({
-            width:width,
-            height:height
+            width: width,
+            height: height
         });
         $("#stage").attr("width", width);
         $("#stage").attr("height", height);
@@ -67,28 +89,12 @@ var loadImage = function (photoId) {
     svg.attr("height", 600);
 
     loadComments();
-
-
-    //["Hello!", "This is wondeful picture!"].forEach(function(v){
-    //    var g = svg.append("g").attr({
-    //        transform:"translate(60,80)",
-    //        x: 60,
-    //        y: 80
-    //    }).datum({x: 60, y: 80}).call(drag);
-    //    g.append("text").text(v).attr({
-    //        class: "text",
-    //        "font-family": "Times New Roman",
-    //        "font-size": "20px"
-    //    }).call(addBorder, {});
-    //});
-
-
-//        ctx2.scale(13/6, 13/6);
 }
-var photoId;
-var loadPhoto = function(){
-    //    var photoId = 76664428;
-    //var photoId = 58331258;
+var photoId; // sample 76664428, 58331258, 76667292
+var uuid;
+var visionApiPrepared = false;
+
+var loadPhoto = function () {
 
     // https://www.eyeem.com/p/76667292
     photoId = parseInt($("#input-photo-url").val().split("/")[4]);
@@ -102,47 +108,48 @@ var loadPhoto = function(){
             photoId: photoId
         }, function (data) {
             console.log(data);
+            uuid = data.uuid; // {uuid:123456789} のように、VISION APIが発行したuuidが返る
+            prepareVisionApi(uuid);
             loadImage(photoId); // この時点で、サーバに画像が、/img/[photoId].jpg として保存されているはず！
         });
     });
-    //　retrive comments
-    $.get(API_URL_COMMENT.replace(":id", photoId), {client_id: CLIENT_ID}, function (data) {
-        console.log(data.comments);
-        data.comments.items.forEach(function (item) {
-            //console.log(item.message);
-//                console.log(item.user);
-//            $("#comments").append($("<li/>").text(item.message));
-        });
+}
+
+var queryVisionApi = function (uuid, successHandler, errorHandler) {
+    //var uuid = "a54c1f6e-3481-4163-86f5-772099eecfd5";
+    // https://vision.eyeem.com/photohackday/photos/UUID-from-POST-request -H "Authorization: PHOTOHACKDAY123"
+    $.ajax({
+        url: API_URL_VISION.replace(":uuid", uuid),
+        type: 'GET',
+        headers: {
+            "Authorization": "PHOTOHACKDAY123"
+        },
+        dataType: 'json',
+        success: successHandler, // function(data, status, xmlHttp)
+        error: errorHandler // function(xmlHttp, status, error)
     });
 }
 
 $(function () {
     $("#btn-photo-load").click(loadPhoto);
-    $("#chk-baloon").change(function(v){
+    $("#chk-baloon").change(function (v) {
         console.log(this.checked);
-        if(this.checked){
+        if (this.checked) {
             addBaloon();
         }
     });
-    $("#btn-secret").click(function(){
-        alert("secret button is now under modification. published in the middle of Dec");
-        return;
-        var uuid = "a54c1f6e-3481-4163-86f5-772099eecfd5";
-        // https://vision.eyeem.com/photohackday/photos/UUID-from-POST-request -H "Authorization: PHOTOHACKDAY123"
-        $.ajax({
-            url: "https://vision.eyeem.com/photohackday/photos/" + uuid,
-            type: 'GET',
-            headers: {
-                "Authorization":"PHOTOHACKDAY123"
-            },
-            dataType: 'json'
-        }).done(function(data) {
+    $("#btn-secret").click(function () {
+        if (!visionApiPrepared) {
+            alert("EyeEm Vision API is still analyzing this photo.Please wait for a while.");
+            return;
+        }
+        queryVisionApi(uuid, function (data) {
             console.log(data);
             var part = [];
-            for(var i= 0;i<15;i++){
+            for (var i = 0; i < 15; i++) {
                 part.push(data.concepts[i]);
             }
-            addComments(part.map(function(v, i){
+            addComments(part.map(function (v, i) {
                 var prefixes = [
                     "Great ",
                     "Amazing ",
