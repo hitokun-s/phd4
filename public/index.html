@@ -1,40 +1,45 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja" dir="ltr" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja" dir="ltr" xmlns:og="http://ogp.me/ns#"
+      xmlns:fb="http://www.facebook.com/2008/fbml">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="comment merge tool for EyeEm photo">
     <meta name="author" content="Hitoshi Wada">
-    <meta property="og:title" content="Commentie" />
-    <meta property="og:type" content="website" />
-    <meta property="og:description" content="comment merge tool for EyeEm photo" />
-    <meta property="og:url" content="http://commentie.net" />
-    <meta property="og:image" content="img/capture_big.png" />
-    <meta property="og:site_name" content="Commentie" />
-    <meta property="og:locale" content="en" />
+    <meta property="og:title" content="Commentie"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:description" content="comment merge tool for EyeEm photo"/>
+    <meta property="og:url" content="http://commentie.net"/>
+    <meta property="og:image" content="img/capture_big.png"/>
+    <meta property="og:site_name" content="Commentie"/>
+    <meta property="og:locale" content="en"/>
 
     <title>Commentie</title>
 
     <script src="../js/jquery-1.10.2.min.js"></script>
+    <script src="../components/jquery-ui/jquery-ui.js"></script>
     <script src="../js/d3.v3.min.js"></script>
     <script src="../js/util.js"></script>
     <script type="text/javascript" src="http://canvg.googlecode.com/svn/trunk/rgbcolor.js"></script>
     <script type="text/javascript" src="http://canvg.googlecode.com/svn/trunk/StackBlur.js"></script>
     <script type="text/javascript" src="http://canvg.googlecode.com/svn/trunk/canvg.js"></script>
+    <script src="../components/underscore/underscore-min.js"></script>
     <script src="../js/canvas-toBlob.js" charset="UTF-8"></script>
     <script src="../js/FileSaver.js" charset="UTF-8"></script>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/phd4.css" rel="stylesheet">
     <style>
-        #input-photo-url, #btn-photo-load,#btn-secret,#download {
+        #input-photo-url, #btn-photo-load, #btn-secret, #download {
             width: 100%;;
         }
-        #txt-secret{
+
+        #txt-secret {
             font-size: xx-large;
-            color:red;
+            color: red;
         }
-        #row-secret{
+
+        #row-secret {
             display: none;
         }
     </style>
@@ -92,7 +97,8 @@
         <div class="form-group">
             <div class="col-lg-8">
                 <!--<ul id="comments"></ul>-->
-                <input id="input-photo-url" class="form-control" type="text" placeholder="https://www.eyeem.com/p/76667292"/>
+                <input id="input-photo-url" class="form-control" type="text"
+                       placeholder="https://www.eyeem.com/p/76667292"/>
             </div>
             <div class="col-lg-2">
                 <button class="btn btn-primary" id="btn-photo-load">Load Photo</button>
@@ -104,7 +110,7 @@
     </div>
     <div class="row" id="row-secret">
         <div class="col-lg-10" id="txt-secret">
-            Oh You have no friend to comment on your photo?  Don't worry! =>
+            Oh You have no friend to comment on your photo? Don't worry! =>
         </div>
         <div class="col-lg-2">
             <button id="btn-secret" class="btn btn-danger">Secret</button>
@@ -127,7 +133,15 @@
     </div>
 </div>
 <canvas id="canvas2" width="600" height="600"></canvas>
+<div class="container lead">
+    <div class="row">
+        <div class="col-lg-12">
+            <button data-click="enlarge">enlarge</button>
+        </div>
+    </div>
+</div>
 <script src="../js/phd4.js"></script>
+<script src="../js/ht-binder.js"></script>
 <script>
 </script>
 </body>

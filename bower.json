@@ -1,0 +1,24 @@
+{
+  "name": "photohackday",
+  "description": "",
+  "main": "",
+  "authors": [
+    "hitokun-s <jgpuauno@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/hitokun-s/phd4",
+  "moduleType": [],
+  "directory": "public/components",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "underscore": "~1.8.3",
+    "jquery-ui": "~1.11.4"
+  }
+}

@@ -22,6 +22,7 @@ var svg = d3.select("svg");
 
 var download = function () {
     console.log($("#svg").html());
+    ctx2.scale(1/scale,1/scale);
     ctx2.drawSvg("<svg>" + $("#svg").html() + "</svg>");
     ctx.drawImage(canvas2, 0, 0);
     $("#svg").remove();
@@ -32,6 +33,8 @@ var download = function () {
 $("#download").click(download);
 
 var height, width;
+var img;
+var scale = 1;
 
 // VISION APIの解析が完了するまでチェックし続ける
 var cnt = 0;
@@ -54,6 +57,30 @@ var prepareVisionApi = function (uuid) {
         });
 }
 
+var setImage = function (ratio) {
+    width = img.width * ratio;
+    height = img.height * ratio;
+
+    svg.attr({
+        width: width,
+        height: height
+    });
+    $("#stage").attr("width", width);
+    $("#stage").attr("height", height);
+    $("#stage").css("width", width);
+    $("#stage").css("height", height);
+    $("#canvas").attr("width", width);
+    $("#canvas").attr("height", height);
+    $("#canvas2").attr("width", width);
+    $("#canvas2").attr("height", height);
+    ctx = canvas.getContext('2d');
+    ctx2 = canvas2.getContext('2d');
+
+    ctx.scale(ratio, ratio);
+    ctx.drawImage(img, 0, 0);
+}
+
+
 var loadImage = function (photoId) {
 
     if (!canvas || !canvas.getContext) {
@@ -61,32 +88,13 @@ var loadImage = function (photoId) {
     }
 
     ctx.strokeStyle = "#000";
-    var img = new Image();
+    img = new Image();
     img.onload = function () {
+        scale = 1;
         console.log("on load!");
-        height = img.height;
-        width = img.width;
-        svg.attr({
-            width: width,
-            height: height
-        });
-        $("#stage").attr("width", width);
-        $("#stage").attr("height", height);
-        $("#stage").css("width", width);
-        $("#stage").css("height", height);
-        $("#canvas").attr("width", width);
-        $("#canvas").attr("height", height);
-        $("#canvas2").attr("width", width);
-        $("#canvas2").attr("height", height);
-        ctx = canvas.getContext('2d');
-        ctx2 = canvas2.getContext('2d');
-
-        ctx.drawImage(img, 0, 0);
+        setImage(scale);
     };
     img.src = "img/" + photoId + ".jpg";
-
-    svg.attr("width", 600);
-    svg.attr("height", 600);
 
     loadComments();
 }
@@ -94,7 +102,7 @@ var photoId; // sample 76664428, 58331258, 76667292
 var uuid;
 var visionApiPrepared = false;
 
-var clearStage = function(){
+var clearStage = function () {
     svg.selectAll("*").remove();
     visionApiPrepared = false;
 }
@@ -141,7 +149,7 @@ $(function () {
     $("#chk-baloon").change(function (v) {
         if (this.checked) {
             addBaloon();
-        }else{
+        } else {
             removeBorder();
         }
     });
@@ -169,4 +177,9 @@ $(function () {
         });
     });
 });
+
+var enlarge = function () {
+    scale *= 1.2;
+    setImage(scale);
+};
 
