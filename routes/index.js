@@ -37,7 +37,8 @@ router.get("/loadImage", function (req, res) {
         console.log("VISION API command:" + commandLine);
 
         var apiRes = exec(commandLine);
-        if(apiRes.stderr){
+        if(!apiRes.stdout && apiRes.stderr){
+            console.log('stdout' + apiRes.stdout);
             console.log('error: ' + apiRes.stderr);
             return res.error(apiRes.stderr);
         }
